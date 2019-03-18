@@ -1,0 +1,116 @@
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Your Name</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <input  type="text" #sender  class="feedback-input" placeholder="Name" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="SaveName(sender.value); sender.value=''">Save The Name</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chat_window">
+    <div class="top_menu">
+      <div class="buttons">
+        <div class="button close"></div>
+        <div class="button minimize"></div>
+        <div class="button maximize"></div>
+      </div>
+      <div class="title">Chat DavidHealth</div>
+    </div>
+    <ul class="messages">
+
+        <ng-container *ngFor="let his of chatHistorique">
+            <li class="message right appeared" *ngIf="his.sender == 'Bob'">
+                <div class="avatar"></div>
+                <div class="text_wrapper">
+                    <div class="text">{{his.sender}} : {{his.text}} <br><span class="badge badge-pill badge-info">{{this.ExtractDate(his.time)}}</span></div>
+                </div>
+            </li>
+            <li class="message left appeared"  *ngIf="his.sender == 'Jim'">
+                <div class="avatar"></div>
+                <div class="text_wrapper">
+                    <div class="text">{{his.sender}} : {{his.text}} <br><span class="badge badge-pill badge-info">{{this.ExtractDate(his.time)}}</span></div>
+                </div>
+            </li>
+        </ng-container>
+
+        <ng-container *ngIf="this.sendervar != 'ADMIN'">
+            <ng-container *ngFor="let chat of chatsArray">
+                <li class="message right appeared" *ngIf="chat.sender == this.sendervar" >
+                    <div class="avatar"></div>
+                    <div class="text_wrapper">
+                        <div class="text">{{chat.sender}} : {{chat.text}}<br><span class="badge badge-pill badge-info">{{this.ExtractDate(chat.time)}}</span></div>
+                    </div>
+                </li>
+                <li class="message left appeared" *ngIf="chat.sender == 'ADMIN'" >
+                    <div class="avatar"></div>
+                    <div class="text_wrapper">
+                        <div class="text">{{chat.sender}} : {{chat.text}}<br><span class="badge badge-pill badge-info">{{this.ExtractDate(chat.time)}}</span></div>
+                    </div>
+                </li>
+            </ng-container>
+        </ng-container>
+
+
+
+
+<ng-container *ngIf="this.sendervar == 'ADMIN'">
+    <ng-container *ngFor="let chat of chatsArray">
+        <li class="message right appeared" *ngIf="chat.sender != 'ADMIN'" >
+            <div class="avatar"></div>
+            <div class="text_wrapper">
+                <div class="text">{{chat.sender}} : {{chat.text}}<br><span class="badge badge-pill badge-info">{{this.ExtractDate(chat.time)}}</span></div>
+            </div>
+        </li>
+        <li class="message left appeared" *ngIf="chat.sender == 'ADMIN'" >
+            <div class="avatar"></div>
+            <div class="text_wrapper">
+                <div class="text">{{chat.sender}} : {{chat.text}}<br><span class="badge badge-pill badge-info">{{this.ExtractDate(chat.time)}}</span></div>
+            </div>
+        </li>
+    </ng-container>
+</ng-container>
+
+
+
+
+
+
+    </ul>
+
+    <form [formGroup]="this.chatService.form" (ngSubmit)="onSubmit()">
+     <div class="bottom_wrapper clearfix">
+
+        <input type="hidden" formControlName="$key" >
+        <input type="hidden" formControlName="sender" [value]="this.sendervar">
+        <input type="hidden" formControlName="time" [value]="this.timevar">
+        <input class="message_input" placeholder="Type your message here..." formControlName="text" class="form-control" [ngClass]="{'is-invalid':submitted && formControls.text.errors}" >
+          <div class="invalid-feedback" *ngIf="submitted && formControls.text.errors">
+            This text is required.
+
+      </div>
+     </div>
+    </form>
+
+
+  </div>
+  <div class="message_template">
+    <li class="message">
+    <div class="avatar"></div><div class="text_wrapper"><div class="text"></div></div>
+    </li>
+  </div>
+  <div class="alert alert-info"  *ngIf="showSuccessMessage">
+    Submitted successfully.
+  </div>
+
+<a  routerLink="/" class="enter">End Chat</a>
